@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Push to subtree
         env:
-          ACCESS_TOKEN: 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
+          ACCESS_TOKEN: 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
           SUBTREE_REPO_NAME: sdfstudio
           SUBTREE_NAME: sub
         run : |
