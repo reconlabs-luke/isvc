@@ -15,14 +15,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Push to subtree
+        uses: s0/git-publish-subdir-action@develop
         env:
-          ACCESS_TOKEN: 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
-          SUBTREE_REPO_NAME: sdfstudio
-          SUBTREE_NAME: sub
-        run : |
-          git config --global user.name reconlabs-luke
-          git config --global user.email luke@reconlabs.ai
-          GITHUB_URL="https://${ACCESS_TOKEN}@github.com/reconlabs-luke/sdfstudio.git"
-          echo $ID && echo $PASSWD && echo $GITHUB_URL
-          git remote add ${SUBTREE_NAME} ${GITHUB_URL}
-          git subtree push --prefix ${SUBTREE_REPO_NAME} ${SUBTREE_NAME} ${GITHUB_REF_NAME}
+          REPO: git@github.com:reconlabs-luke/sdfstudio.git
+          BRANCH: ${GITHUB_REF_NAME}
+          FOLDER: sdfstudio
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+
