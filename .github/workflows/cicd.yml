@@ -18,6 +18,7 @@ on:
 
 jobs:
   push-to-subtree:
+    if: github.event.pull_request.merged == true
     name: Push to subtree repository
     runs-on: ubuntu-latest
     env:
