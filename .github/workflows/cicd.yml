@@ -17,7 +17,7 @@ jobs:
     name: Push to subtree repository
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${GITHUB_REF}
+      TARGET_BRANCH: ${{ github.ref.name }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -25,7 +25,7 @@ jobs:
         name: If Merged
         run: |
           if [[ ${GITHUB_REF_NAME} ~= feature/* ]]; then
-            export TARGET_BRANCH="${GITHUB_BASE_REF}"
+            export TARGET_BRANCH=${GITHUB_BASE_REF}
       - if: always()
         name: Push to subtree
         uses: s0/git-publish-subdir-action@develop
