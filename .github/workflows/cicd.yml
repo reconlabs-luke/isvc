@@ -1,13 +1,17 @@
 name: plicar cicd
 
 on:
-  push:
-    branches:
-      - "feature/*"
   pull_request:
     types:
       - closed
     branches: 
+      - "release"
+      - "develop"
+      - "feature/*"
+  push:
+    branches:
+      - "master"
+      - "main"
       - "release"
       - "develop"
       - "feature/*"
@@ -22,7 +26,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - if: github.event.pull_request.merged == true
-        name: If Merged
+        name: If Merged, target branch will be set base branch
         run: |
           export TARGET_BRANCH=${{ github.base_ref }}
       - if: always()
