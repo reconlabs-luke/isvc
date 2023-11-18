@@ -18,5 +18,7 @@ jobs:
                 echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ${HOME}/.ssh/id_rsa
             - name: Pull test
               run: |
+                git config --global user.name reconlabs-luke
+                git config --global user.email luke@reconlabs.ai
                 git remote add sub git@github.com:reconlabs-luke/sdfstudio.git
                 git subtree pull --prefix=sdfstudio sub develop
