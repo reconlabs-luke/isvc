@@ -26,6 +26,7 @@ jobs:
         run: |
           if [[ ${{ github.ref_name }} ~= feature/* ]]; then
             export TARGET_BRANCH=${{ github.base_ref }}
+          fi
       - if: always()
         name: Push to subtree
         uses: s0/git-publish-subdir-action@develop
