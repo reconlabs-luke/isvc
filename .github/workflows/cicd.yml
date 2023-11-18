@@ -17,10 +17,8 @@ jobs:
       - name: push-to-subtree
         env:
           ACCESS_TOKEN: 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
-          SUBTREE_REPO_NAME: sdfStudio
+          SUBTREE_REPO_NAME: sdfstudio
           SUBTREE_NAME: sub
-          ID: reconlabs-luke
-          PASSWD: jcj0311!@#$
         run : |
           GITHUB_URL="https://${ACCESS_TOKEN}@github.com/RECON-Labs-Inc/${SUBTREE_REPO_NAME}.git"
           echo $ID && echo $PASSWD && echo $GITHUB_URL
