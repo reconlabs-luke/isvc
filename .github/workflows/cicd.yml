@@ -17,7 +17,7 @@ jobs:
     name: Push to subtree repository
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ github.ref.name }}
+      TARGET_BRANCH: ${{ github.ref_name }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
