@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "저 plicar 인데요 "
+echo "저 plicar 인데요"
