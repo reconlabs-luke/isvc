@@ -1,24 +1,40 @@
 name: plicar cicd
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches: 
-      - "master"
       - "release"
       - "develop"
+      - "feature/*"
+  push:
+    branches:
+      - "master"
+      - "main"
+      - "release"
+      - "develop"
+      - "feature/*"
 
 jobs:
   push-to-subtree:
+    if: github.event.pull_request.merged == true
     name: Push to subtree repository
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ github.ref_name }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Push to subtree
+      - if: github.event.pull_request.merged == true
+        name: If Merged, target branch will be set base branch
+        run: |
+          export TARGET_BRANCH=${{ github.base_ref }}
+      - if: always()
+        name: Push to subtree
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: git@github.com:reconlabs-luke/sdfstudio.git
-          BRANCH: ${GITHUB_REF_NAME}
+          BRANCH: ${TARGET_BRANCH}
           FOLDER: sdfstudio
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-
