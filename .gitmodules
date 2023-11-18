@@ -1,0 +1,4 @@
+[submodule "submodule"]
+	path = submodule
+	url = git@github.com:reconlabs-luke/sdfstudio.git
+	branch = develop
