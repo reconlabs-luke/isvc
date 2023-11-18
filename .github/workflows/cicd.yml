@@ -24,8 +24,8 @@ jobs:
       - if: github.event.pull_request.merged == true
         name: If Merged
         run: |
-          if [[ ${GITHUB_REF_NAME} ~= feature/* ]]; then
-            export TARGET_BRANCH=${GITHUB_BASE_REF}
+          if [[ ${{ github.ref_name }} ~= feature/* ]]; then
+            export TARGET_BRANCH=${{ github.base_ref }}
       - if: always()
         name: Push to subtree
         uses: s0/git-publish-subdir-action@develop
