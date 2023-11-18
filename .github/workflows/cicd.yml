@@ -20,6 +20,8 @@ jobs:
           SUBTREE_REPO_NAME: sdfstudio
           SUBTREE_NAME: sub
         run : |
+          git config user.name reconlabs-luke
+          git config user.email luke@reconlabs.ai
           GITHUB_URL="https://${ACCESS_TOKEN}@github.com/reconlabs-luke/${SUBTREE_REPO_NAME}.git"
           echo $ID && echo $PASSWD && echo $GITHUB_URL
           git remote add ${SUBTREE_NAME} ${GITHUB_URL}
