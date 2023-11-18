@@ -1,0 +1,30 @@
+name: Deploy to ECR
+
+on:
+  push:
+    branches: 
+      - "master"
+      - "release"
+      - "develop"
+
+jobs:
+  push-to-subtree:
+    name: Push to subtree repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: push-to-subtree
+        env:
+          ACCESS_TOKEN: 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
+          SUBTREE_REPO_NAME: test-sdfStudio
+          SUBTREE_NAME: sub
+          ID: reconlabs-luke
+          PASSWD: jcj0311!@#$
+        run : |
+          git config user.name reconlabs-luke
+          git config user.email luke@reconlabs.ai
+          GITHUB_URL="https://'${ID}':'${PASSWD}'@github.com/RECON-Labs-Inc/${SUBTREE_REPO_NAME}.git"
+          echo $ID && echo $PASSWD && echo $GITHUB_URL
+          git remote add ${SUBTREE_NAME} ${GITHUB_URL}
+          git subtree push --prefix ${SUBTREE_REPO_NAME} ${SUBTREE_NAME} ${GITHUB_REF_NAME}
