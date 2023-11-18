@@ -1,4 +1,4 @@
-name: Deploy to ECR
+name: plicar cicd
 
 on:
   push:
@@ -14,9 +14,9 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: push-to-subtree
+      - name: Push to subtree
         env:
-          ACCESS_TOKEN: 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
+          ACCESS_TOKEN: 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
           SUBTREE_REPO_NAME: sdfstudio
           SUBTREE_NAME: sub
         run : |
