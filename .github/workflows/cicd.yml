@@ -20,7 +20,7 @@ jobs:
           SUBTREE_REPO_NAME: sdfstudio
           SUBTREE_NAME: sub
         run : |
-          GITHUB_URL="https://${ACCESS_TOKEN}@github.com/RECON-Labs-Inc/${SUBTREE_REPO_NAME}.git"
+          GITHUB_URL="https://${ACCESS_TOKEN}@github.com/reconlabs-luke/${SUBTREE_REPO_NAME}.git"
           echo $ID && echo $PASSWD && echo $GITHUB_URL
           git remote add ${SUBTREE_NAME} ${GITHUB_URL}
           git subtree push --prefix ${SUBTREE_REPO_NAME} ${SUBTREE_NAME} ${GITHUB_REF_NAME}
