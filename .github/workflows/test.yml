@@ -1,0 +1,22 @@
+name: test
+
+on:
+  push:
+    branches:
+      - "feature/*"
+    
+jobs:
+    test-subtree:
+        name: test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Make private key
+              run: |
+                mkdir -p ~/.ssh
+                echo ${{ secrets.DEPLOY_PRIVATE_KEY }} > ~/.ssh/id_rsa
+            - name: Pull test
+              run: |
+                git remote add sub git@github.com:reconlabs-luke/sdfstudio.git
+                git subtree pull --prefix=sdfstudio sub develop
