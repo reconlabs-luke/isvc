@@ -16,6 +16,7 @@ jobs:
               run: |
                 mkdir -p ${HOME}/.ssh
                 echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ${HOME}/.ssh/id_rsa
+                echo "${{ secrets.DEPLOY_PUB_KEY }}" > ${HOME}/.ssh/id_rsa.pub
             - name: Pull test
               run: |
                 git config --global user.name reconlabs-luke
