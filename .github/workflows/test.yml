@@ -17,9 +17,10 @@ jobs:
                 mkdir -p ${HOME}/.ssh
                 echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ${HOME}/.ssh/id_rsa
                 echo "${{ secrets.DEPLOY_PUB_KEY }}" > ${HOME}/.ssh/id_rsa.pub
+                ssh-add -K ~/.ssh/id_rsa
             - name: Pull test
               run: |
                 git config --global user.name reconlabs-luke
                 git config --global user.email luke@reconlabs.ai
-                sudo git remote add sub reconlabs-luke@github.com:reconlabs-luke/sdfstudio.git
+                sudo git remote add sub git@github.com:reconlabs-luke/sdfstudio.git
                 sudo git subtree pull --prefix=sdfstudio sub develop
