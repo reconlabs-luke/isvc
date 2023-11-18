@@ -3,17 +3,20 @@ name: test
 on:
   push:
     branches:
-      - "feature/*"
-    
+      - develop
+      - release
+      - main
+      - master
+
 jobs:
     test-subtree:
         name: test
         runs-on: ubuntu-latest
         steps:
-            - name: Check out code
-              uses: actions/checkout@v3
-            - name: Set On the Branch
-              run: |
-                git config -f .gitmodules submodule.submodule.branch ${{ github.base_ref }}
-                git submodule update --remote --recursive
-                
+            - name: Trigger on management repository
+              uses: peter-evans/repository-dispatch@v2
+              with:
+                token: ${{ secrets.ACTION_TOKEN }}
+                repository: reconlabs-luke/management
+                event-type: metarecon3
+                client-payload: '{"branch": "${{ github.ref_name }}", "sha": "${{ github.sha }}"}'
