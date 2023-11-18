@@ -11,17 +11,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Check out code
-              uses: actions/checkout@v2
-            - name: Make private key
-              run: |
-                mkdir -p ${HOME}/.ssh
-                echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ${HOME}/.ssh/id_rsa
-                echo "${{ secrets.DEPLOY_PUB_KEY }}" > ${HOME}/.ssh/id_rsa.pub
-                chmod 777 ${HOME}/.ssh/id_rsa
-                sudo ssh-add ${HOME}/.ssh/id_rsa
+              uses: actions/checkout@v3
             - name: Pull test
               run: |
                 git config --global user.name reconlabs-luke
                 git config --global user.email luke@reconlabs.ai
-                sudo git remote add sub git@github.com:reconlabs-luke/sdfstudio.git
+                sudo git remote add sub https://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@github.com/reconlabs-luke/sdfstudio.git
                 sudo git subtree pull --prefix=sdfstudio sub develop
