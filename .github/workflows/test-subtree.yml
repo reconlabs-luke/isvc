@@ -38,8 +38,6 @@ jobs:
           eval $(ssh-agent)
           chmod 400 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
-      - name: ??
-        run: |
           ssh-add -l
       - name: Add ssh config
         run: |
