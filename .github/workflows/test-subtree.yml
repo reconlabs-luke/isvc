@@ -50,7 +50,7 @@ jobs:
       - name: ㅁㅈ
         run: |
           git clone git@github.com:reconlabs-luke/sdfstudio.git lotto
-          cat lotto && echo "Success"
+          ls -al lotto && echo "Success"
         
 
       # - name: Add subtree's remote repository 
