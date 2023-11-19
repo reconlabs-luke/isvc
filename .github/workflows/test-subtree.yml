@@ -32,20 +32,20 @@ jobs:
           mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.DEPLOY_PUB_KEY }}" > ~/.ssh/id_rsa.pub
           chmod 400 ~/.ssh/id_rsa
-      # - name: Add to ssh agent
-      #   run: |
-      #     eval $(ssh-agent)
-      #     chmod 400 ~/.ssh/id_rsa
-      #     ssh-add ~/.ssh/id_rsa
-      #     ssh-add -l
-      - name: Add ssh config
+      - name: Add to ssh agent
         run: |
-          cat <<EOF >> ~/.ssh/config
-          Host github.com
-              User git
-              HostName github.com
-              IdentityFile ~/.ssh/id_rsa
-          EOF
+          eval $(ssh-agent)
+          chmod 400 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+      # - name: Add ssh config
+      #   run: |
+      #     cat <<EOF >> ~/.ssh/config
+      #     Host github.com
+      #         User git
+      #         HostName github.com
+      #         IdentityFile ~/.ssh/id_rsa
+      #     EOF
       - name: ㅁㅈ
         run: |
           git clone git@github.com:reconlabs-luke/sdfstudio.git lotto
