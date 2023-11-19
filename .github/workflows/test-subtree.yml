@@ -1,0 +1,48 @@
+name: test-subtree
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches: 
+      - "release"
+      - "develop"
+      - "feature/*"
+  push:
+    branches:
+      - "master"
+      - "main"
+      - "release"
+      - "develop"
+      - "feature/*"
+
+jobs:
+  push-to-subtree:
+    name: Push to subtree repository
+    runs-on: ubuntu-latest
+    env:
+      TARGET_GROUP: reconlabs-luke
+      TARGET_REPOSITORY: sdfstudio
+      TARGET_BRANCH: ${{ github.ref_name }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Add subtree's remote repository 
+        run: |
+            export MY_GITHUB_URL=https://${{ secrets.ACTION_TOKEN }}@github.com/${TARGET_GROUP}/${TARGET_REPOSITORY}.git
+            echo ${MY_GITHUB_URL}
+            git remote add ${TARGET_REPOSITORY} ${MY_GITHUB_URL}
+            git remote update
+      - if: github.event.pull_request.merged == true
+        name: If Merged, target branch will be set base branch
+        run: |
+          export TARGET_BRANCH=${{ github.base_ref }}
+      - if: always()
+        name: Pull from subtree repository
+        run: |
+            git remote -v
+            git subtree pull --squash --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+      - if: always()
+        name: Push to subtree repository
+        run: |
+            git subtree push --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
