@@ -32,8 +32,12 @@ jobs:
           git config --global user.name reconlabs-luke
           git config --global user.email luke@reconlabs.ai
           mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      - name: Add to ssh agent
+        run: |
           eval $(ssh-agent)
           ssh-add ~/.ssh/id_rsa
+      - name: ??
+        run: |
           ssh-add -l
       - name: Add ssh config
         run: |
