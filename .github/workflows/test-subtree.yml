@@ -47,9 +47,10 @@ jobs:
               HostName github.com
               IdentityFile ~/.ssh/id_rsa
           EOF
-      - name: ??
+      - name: ㅁㅈ
         run: |
-          ssh -T git@github.com
+          git clone git@github.com:reconlabs-luke/sdfstudio.git
+          echo "Success"
         
 
       # - name: Add subtree's remote repository 
