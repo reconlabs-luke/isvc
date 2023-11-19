@@ -35,6 +35,7 @@ jobs:
       - name: Add to ssh agent
         run: |
           eval $(ssh-agent)
+          chmod 400 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
       - name: ??
         run: |
