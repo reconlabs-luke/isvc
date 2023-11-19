@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v3
       - name: With ssh
         run: |
-          mkdir -p ~/.ssh && echo ${{ secrets.DEPLOY_PRIVATE_KEY }} > ~/.ssh/id_rsa
+          mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           cat <<EOF >> ~/.ssh/config
           Host github.com
               HostName reconlabs-luke
