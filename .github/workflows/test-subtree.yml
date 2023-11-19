@@ -27,22 +27,33 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-      - name: Add subtree's remote repository 
+      - name: With ssh
         run: |
-            export MY_GITHUB_URL=https://${{ secrets.ACTION_TOKEN }}@github.com/${TARGET_GROUP}/${TARGET_REPOSITORY}.git
-            echo ${MY_GITHUB_URL}
-            git remote add ${TARGET_REPOSITORY} ${MY_GITHUB_URL}
-            git remote update
-      - if: github.event.pull_request.merged == true
-        name: If Merged, target branch will be set base branch
-        run: |
-          export TARGET_BRANCH=${{ github.base_ref }}
-      - if: always()
-        name: Pull from subtree repository
-        run: |
-            git remote -v
-            git subtree pull --squash --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
-      - if: always()
-        name: Push to subtree repository
-        run: |
-            git subtree push --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+          mkdir -p ~/.ssh && echo ${{ secrets.DEPLOY_PRIVATE_KEY }} > ~/.ssh/id_rsa
+          cat <<EOF >> ~/.ssh/config
+          Host github.com
+              HostName reconlabs-luke
+              IdentityFile ~/.ssh/id_rsa
+          EOF
+          ssh -T git@github.com
+        
+
+      # - name: Add subtree's remote repository 
+      #   run: |
+      #       export MY_GITHUB_URL=https://${{ secrets.ACTION_TOKEN }}@github.com/${TARGET_GROUP}/${TARGET_REPOSITORY}.git
+      #       echo ${MY_GITHUB_URL}
+      #       git remote add ${TARGET_REPOSITORY} ${MY_GITHUB_URL}
+      #       git remote update
+      # - if: github.event.pull_request.merged == true
+      #   name: If Merged, target branch will be set base branch
+      #   run: |
+      #     export TARGET_BRANCH=${{ github.base_ref }}
+      # - if: always()
+      #   name: Pull from subtree repository
+      #   run: |
+      #       git remote -v
+      #       git subtree pull --squash --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+      # - if: always()
+      #   name: Push to subtree repository
+      #   run: |
+      #       git subtree push --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
