@@ -31,12 +31,12 @@ jobs:
         run: |
           mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.DEPLOY_PUB_KEY }}" > ~/.ssh/id_rsa.pub
-      - name: Add to ssh agent
-        run: |
-          eval $(ssh-agent)
-          chmod 400 ~/.ssh/id_rsa
-          ssh-add ~/.ssh/id_rsa
-          ssh-add -l
+      # - name: Add to ssh agent
+      #   run: |
+      #     eval $(ssh-agent)
+      #     chmod 400 ~/.ssh/id_rsa
+      #     ssh-add ~/.ssh/id_rsa
+      #     ssh-add -l
       - name: Add ssh config
         run: |
           cat <<EOF >> ~/.ssh/config
