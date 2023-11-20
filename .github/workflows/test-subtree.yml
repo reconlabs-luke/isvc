@@ -48,8 +48,7 @@ jobs:
       - if: always()
         name: Pull from subtree repository
         run: |
-          git pull origin ${TARGET_BRANCH}
-          git subtree pull --squash -s ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+          git pull --squash -s subtree ${TARGET_REPOSITORY} ${TARGET_BRANCH}
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
