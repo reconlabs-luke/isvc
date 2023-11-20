@@ -50,7 +50,7 @@ jobs:
         run: |
           git config pull.rebase true
           git pull --squash -s subtree ${TARGET_REPOSITORY} ${TARGET_BRANCH}
-      # - if: always()
-      #   name: Push to subtree repository
-      #   run: |
-      #       git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
+      - if: always()
+        name: Push to subtree repository
+        run: |
+            git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
