@@ -1,0 +1,92 @@
+name: SyncUp-sdfStudio
+
+on:
+  repository_dispatch:
+    types: 
+      - sdfstudio
+  pull_request:
+    types:
+      - opened
+    branches:
+      - "develop"
+      - "feature/*"
+      - "hotfix/*"
+    paths:
+      - sdfstudio/**
+  push:
+    branches:
+      - "main"
+      - "master"
+      - "develop"
+      - "feature/*"
+      - "hotfix/*"
+
+env:
+  TARGET_GROUP: reconlabs-luke
+  TARGET_REPOSITORY: sdfstudio
+  TARGET_BRANCH: ${{ github.ref_name }}
+  MANAGER_NAME: luke
+  EMAIL_FORM: reconlabs.ai
+
+jobs:
+  push-to-subtree:
+    name: Push to sdfStudio
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.client_payload.msg, '[ci skip]') }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Add ssh private key
+        run: |
+          git config --global user.name reconlabs-${MANAGER_NAME}
+          git config --global user.email "${MANAGER_NAME}"@"${EMAIL_FORM}" 
+          mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.DEPLOY_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+          chmod 400 ~/.ssh/id_rsa
+      - name: Add to ssh agent
+        run: |
+          eval $(ssh-agent)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+      - name: Add subtree's remote repository 
+        run: |
+          git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
+          git remote update
+      - if: github.event.pull_request.merged == true
+        name: If merged, change target branch
+        run: |
+          export TARGET_BRNACH=${{ github.base_ref }}
+      - name: Push to subtree repository
+        run: |
+          git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:refs/heads/${TARGET_BRANCH} --force
+
+  merge-from-subtree:
+    name: Merge from sdfStudio
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
+    steps:
+      - name: Checkout out code when updating subtree
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.ref }}
+      - name: Add ssh private key
+        run: |
+          git config --global user.name reconlabs-${MANAGER_NAME}
+          git config --global user.email "${MANAGER_NAME}"@"${EMAIL_FORM}" 
+          mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.DEPLOY_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+          chmod 400 ~/.ssh/id_rsa
+      - name: Add to ssh agent
+        run: |
+          eval $(ssh-agent)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+      - name: Add subtree's remote repository 
+        run: |
+          git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
+          git remote update
+      - name: Merge from subtree repository
+        run: |
+          git merge -X theirs -m "[push skip] ${{ github.event.client_payload.msg }}" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
+          bash ${TARGET_REPOSITORY}/hello.bash
+          git push -f
