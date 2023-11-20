@@ -45,12 +45,12 @@ jobs:
         name: If Merged, target branch will be set base branch
         run: |
           export TARGET_BRANCH=${{ github.base_ref }}
-      # - if: always()
-      #   name: Pull from subtree repository
-      #   run: |
-      #     git pull origin ${TARGET_BRANCH}
-      #     git subtree pull --squash -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
       - if: always()
-        name: Push to subtree repository
+        name: Pull from subtree repository
         run: |
-            git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
+          git pull origin ${TARGET_BRANCH}
+          git subtree pull --squash -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+      # - if: always()
+      #   name: Push to subtree repository
+      #   run: |
+      #       git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
