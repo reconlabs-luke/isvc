@@ -51,13 +51,6 @@ jobs:
         name: If merged, change target branch
         run: |
           export TARGET_BRNACH=${{ github.base_ref }}
-      # - if: always()
-      #   name: Pull from subtree repository
-      #   run: |
-      #     git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.base_ref }} --allow-unrelated-histories
-      #     bash ${TARGET_REPOSITORY}/hello.bash
-      #     git push origin ${{ github.base_ref }}
-      #     echo good !
       - if: always()
         name: Push to subtree repository
         run: |
