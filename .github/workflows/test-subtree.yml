@@ -51,7 +51,6 @@ jobs:
           export GIT_MERGE_AUTOEDIT=no
           export GIT_EDITOR=true
           git config pull.ff only
-          git config pull.rebase true
           git subtree pull -P "${TARGET_REPOSITORY}" --squash ${TARGET_REPOSITORY} ${TARGET_BRANCH}
       # - if: always()
       #   name: Push to subtree repository
