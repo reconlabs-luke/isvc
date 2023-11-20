@@ -53,8 +53,7 @@ jobs:
         name: Pull from subtree repository
         run: |
           git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${TARGET_BRANCH} --allow-unrelated-histories
-          ls
-          ls ${TARGET_REPOSITORY}
+          bash ${TARGET_REPOSITORY}/hello.bash
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
