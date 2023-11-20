@@ -2,7 +2,8 @@ name: dispatch receiver
 
 on: 
   repository_dispatch:
-    types: [ sdfstudio ]
+    types: 
+      - sdfstudio
 
 jobs:
   sdfstudio-update:
@@ -35,6 +36,6 @@ jobs:
           git remote update
       - name: Update subtree
         run: |
-          git merge -m "ci skip" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.branch }} --allow-unrelated-histories
+          git merge -m "ci skip" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
-          echo ${{ github.event.client_payload.branch }} && git branch
+          echo ${{ github.event.client_payload.ref }} && git branch
