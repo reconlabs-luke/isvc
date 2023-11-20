@@ -17,8 +17,6 @@ on:
       - "master"
       - "release"
       - "develop"
-    paths:
-      - sdfstudio/**
 
 jobs:
   push-to-subtree:
@@ -64,4 +62,4 @@ jobs:
         name: Push to subtree repository
         run: |
           ls
-          git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
+          git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:refs/heads/${TARGET_BRANCH} --force
