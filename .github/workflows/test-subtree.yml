@@ -8,13 +8,6 @@ on:
       - "release"
       - "develop"
       - "feature/*"
-  push:
-    branches:
-      - "master"
-      - "main"
-      - "release"
-      - "develop"
-      - "feature/*"
 
 jobs:
   push-to-subtree:
@@ -23,7 +16,6 @@ jobs:
     env:
       TARGET_GROUP: reconlabs-luke
       TARGET_REPOSITORY: sdfstudio
-      TARGET_BRANCH: ${{ github.ref_name }}
       MANAGER_NAME: luke
       EMAIL_FORM: reconlabs.ai
     steps:
@@ -45,15 +37,12 @@ jobs:
         run: |
           git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
           git remote update
-      - if: github.event.pull_request.merged == true
-        name: If Merged, target branch will be set base branch
-        run: |
-          export TARGET_BRANCH=${{ github.base_ref }}
       - if: always()
         name: Pull from subtree repository
         run: |
-          git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${TARGET_BRANCH} --allow-unrelated-histories
+          git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.base_ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
+          git push origin ${{ github.base_ref }}
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
