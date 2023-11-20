@@ -35,33 +35,16 @@ jobs:
       - name: Add to ssh agent
         run: |
           eval $(ssh-agent)
-          chmod 400 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
           ssh-add -l
-      # - name: Add ssh config
-      #   run: |
-      #     cat <<EOF >> ~/.ssh/config
-      #     Host github.com
-      #         User git
-      #         HostName github.com
-      #         IdentityFile ~/.ssh/id_rsa
-      #     EOF
-      - name: ㅁㅈ
+      - name: Add subtree's remote repository 
         run: |
-          git clone git@github.com:reconlabs-luke/sdfstudio.git lotto
-          ls -al lotto && echo "Success"
-        
-
-      # - name: Add subtree's remote repository 
-      #   run: |
-      #       export MY_GITHUB_URL=https://${{ secrets.ACTION_TOKEN }}@github.com/${TARGET_GROUP}/${TARGET_REPOSITORY}.git
-      #       echo ${MY_GITHUB_URL}
-      #       git remote add ${TARGET_REPOSITORY} ${MY_GITHUB_URL}
-      #       git remote update
-      # - if: github.event.pull_request.merged == true
-      #   name: If Merged, target branch will be set base branch
-      #   run: |
-      #     export TARGET_BRANCH=${{ github.base_ref }}
+            git remote add git@github.com:reconlabs-luke/sdfstudio.git
+            git remote update
+      - if: github.event.pull_request.merged == true
+        name: If Merged, target branch will be set base branch
+        run: |
+          export TARGET_BRANCH=${{ github.base_ref }}
       # - if: always()
       #   name: Pull from subtree repository
       #   run: |
