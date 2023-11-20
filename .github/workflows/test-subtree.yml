@@ -64,7 +64,8 @@ jobs:
       - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
         name: Merge from subtree repository
         run: |
-          git config pull.rebase true 
+          git config pull.rebase true
+          git subtree pull -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH} --squash
           git merge -m "[ci skip]" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
           git push -f
