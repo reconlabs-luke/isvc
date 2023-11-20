@@ -52,7 +52,7 @@ jobs:
           export GIT_EDITOR=true
           git config pull.ff only
           git config pull.rebase true
-          git subtree pull --prefix=${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH} --squash
+          git subtree pull --prefix="${TARGET_REPOSITORY}" --squash ${TARGET_REPOSITORY} ${TARGET_BRANCH}
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
