@@ -1,0 +1,26 @@
+name: test-trigger
+
+on:
+  push:
+    branches:
+      - develop
+      - release
+      - main
+      - master
+
+jobs:
+    test-subtree:
+        name: test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check
+              run: |
+                echo ${{ github.sha }}
+                echo 
+            - name: Trigger on management repository
+              uses: peter-evans/repository-dispatch@v2
+              with:
+                token: ${{ secrets.ACTION_TOKEN }}
+                repository: reconlabs-luke/plicar
+                event-type: sdfstudio
+                client-payload: '{"ref": "${{ github.ref_name }}", "sha": "${{ github.sha }}", "msg": "[ci skip]"}'
