@@ -9,6 +9,8 @@ on:
       - "master"
       - "release"
       - "develop"
+    paths:
+      - sdfstudio/**
 
 jobs:
   push-to-subtree:
