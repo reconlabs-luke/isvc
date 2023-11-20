@@ -53,4 +53,4 @@ jobs:
       - if: always()
         name: Push to subtree repository
         run: |
-            git subtree push --prefix ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+            git subtree push -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
