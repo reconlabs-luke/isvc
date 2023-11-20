@@ -23,7 +23,7 @@ on:
 
 jobs:
   push-to-subtree:
-    name: Push to subtree repository
+    name: Control Subtree 
     runs-on: ubuntu-latest
     env:
       TARGET_GROUP: reconlabs-luke
@@ -61,12 +61,12 @@ jobs:
         run: |
           export TARGET_BRNACH=${{ github.base_ref }}
       - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
-        name: Add subtree's remote repository 
+        name: Merge from subtree repository
         run: |
-          git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
-          git remote update
+          git merge -m "ci skip" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
+          bash ${TARGET_REPOSITORY}/hello.bash
+          echo ${{ github.event.client_payload.ref }} && git branch
       - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
         name: Push to subtree repository
         run: |
-          ls
           git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:refs/heads/${TARGET_BRANCH} --force
