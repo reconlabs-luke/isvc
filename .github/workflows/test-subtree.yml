@@ -24,11 +24,15 @@ jobs:
       TARGET_GROUP: reconlabs-luke
       TARGET_REPOSITORY: sdfstudio
       TARGET_BRANCH: ${{ github.ref_name }}
+      MANAGER_NAME: luke
+      EMAIL_FORM: reconlabs.ai
     steps:
       - name: Check out code
         uses: actions/checkout@v3
       - name: Add ssh private key
         run: |
+          git config --global user.name reconlabs-${MANAGER_NAME}
+          git config --global user.email "${MANAGER_NAME}"@"${EMAIL_FORM}" 
           mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.DEPLOY_PUB_KEY }}" > ~/.ssh/id_rsa.pub
           chmod 400 ~/.ssh/id_rsa
