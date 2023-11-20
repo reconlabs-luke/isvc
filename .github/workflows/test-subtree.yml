@@ -1,6 +1,8 @@
 name: test-subtree
 
 on:
+  repository_dispatch:
+    types: [ sdfstudio ]
   pull_request:
     types:
       - opened
@@ -11,8 +13,6 @@ on:
       - "develop"
     paths:
       - sdfstudio/**
-  repository_dispatch:
-    types: [ sdfstudio ]
   push:
     branches:
       - "main"
@@ -31,8 +31,14 @@ jobs:
       MANAGER_NAME: luke
       EMAIL_FORM: reconlabs.ai
     steps:
-      - name: Check out code
+      - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
+        name: Check out code
         uses: actions/checkout@v3
+      - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
+        name: Check out code when updating subtree
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.ref }}
       - name: Add ssh private key
         run: |
           git config --global user.name reconlabs-${MANAGER_NAME}
