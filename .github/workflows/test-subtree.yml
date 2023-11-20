@@ -48,10 +48,7 @@ jobs:
       - if: always()
         name: Pull from subtree repository
         run: |
-          export GIT_MERGE_AUTOEDIT=no
-          export GIT_EDITOR=true
-          git config pull.ff only
-          git subtree pull -P "${TARGET_REPOSITORY}" ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+          git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${TARGET_BRANCH} --allow-unrelated-histories
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
