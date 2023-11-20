@@ -43,6 +43,7 @@ jobs:
           git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.base_ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
           git push origin ${{ github.base_ref }}
+          echo good
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
