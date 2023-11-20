@@ -25,7 +25,6 @@ jobs:
   push-to-subtree:
     name: Push to subtree repository
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
     env:
       TARGET_GROUP: reconlabs-luke
       TARGET_REPOSITORY: sdfstudio
@@ -33,8 +32,14 @@ jobs:
       MANAGER_NAME: luke
       EMAIL_FORM: reconlabs.ai
     steps:
-      - name: Check out code
+      - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
+        name: Check out code
         uses: actions/checkout@v3
+      - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
+        name: Checkout out code when updating subtree
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.ref }}
       - name: Add ssh private key
         run: |
           git config --global user.name reconlabs-${MANAGER_NAME}
@@ -55,7 +60,13 @@ jobs:
         name: If merged, change target branch
         run: |
           export TARGET_BRNACH=${{ github.base_ref }}
-      - name: Push to subtree repository
+      - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
+        name: Add subtree's remote repository 
+        run: |
+          git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
+          git remote update
+      - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
+        name: Push to subtree repository
         run: |
           ls
           git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:refs/heads/${TARGET_BRANCH} --force
