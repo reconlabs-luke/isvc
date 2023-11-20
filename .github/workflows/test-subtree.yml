@@ -48,7 +48,8 @@ jobs:
       - if: always()
         name: Pull from subtree repository
         run: |
-          git pull --squash -s subtree ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+          git config pull.rebase true
+          git subtree add -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH} --squash
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
