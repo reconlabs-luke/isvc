@@ -53,7 +53,7 @@ jobs:
         name: If merged, change target branch
         run: |
           export TARGET_BRNACH=${{ github.base_ref }}
-      - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
+      - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
         name: Update from subtree
         run: |
           git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.branch }} --allow-unrelated-histories
