@@ -27,6 +27,7 @@ jobs:
     env:
       TARGET_GROUP: reconlabs-luke
       TARGET_REPOSITORY: sdfstudio
+      TARGET_BRANCH: ${{ github.ref_name }}
       MANAGER_NAME: luke
       EMAIL_FORM: reconlabs.ai
     steps:
@@ -48,6 +49,10 @@ jobs:
         run: |
           git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
           git remote update
+      - if: github.event.pull_request.merged == true
+        name: If merged, change target branch
+        run: |
+          export TARGET_BRNACH=${{ github.base_ref }}
       # - if: always()
       #   name: Pull from subtree repository
       #   run: |
