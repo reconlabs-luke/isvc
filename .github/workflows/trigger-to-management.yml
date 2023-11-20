@@ -1,0 +1,24 @@
+name: Trigger to management
+
+on:
+  workflow_run:
+    workflows: [SyncUp sdfStudio]
+    types:
+      - completed
+
+env:
+  TARGET_GROUP: reconlabs-luke
+  TARGET_REPOSITORY: management
+
+jobs:
+  push-to-subtree:
+    name: Push to subtree repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger on management repository
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.ACTION_TOKEN }}
+          repository: ${{ env.TARGET_GROUP }}/${{ TARGET_REPOSITORY }}
+          event-type: metarecon3
+          client-payload: '{"ref": "${{ github.ref_name }}", "sha": "${{ github.sha }}"}'

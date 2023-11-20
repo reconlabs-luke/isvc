@@ -1,4 +1,4 @@
-name: SyncUp-sdfStudio
+name: SyncUp sdfStudio
 
 on:
   repository_dispatch:
