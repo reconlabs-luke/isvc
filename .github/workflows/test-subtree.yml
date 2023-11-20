@@ -67,7 +67,7 @@ jobs:
           git checkout -b temp-"${{ github.event.client_payload.ref }}"
           git merge -X theirs -m "[ci skip]" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
-          # git push -f
+          git push -f
       - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
         name: Push to subtree repository
         run: |
