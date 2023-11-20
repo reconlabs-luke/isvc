@@ -40,7 +40,6 @@ jobs:
       - name: Add subtree's remote repository 
         run: |
           git remote add ${TARGET_REPOSITORY} git@github.com:reconlabs-luke/sdfstudio.git
-          git subtree add -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
           git remote update
       - if: github.event.pull_request.merged == true
         name: If Merged, target branch will be set base branch
@@ -48,7 +47,9 @@ jobs:
           export TARGET_BRANCH=${{ github.base_ref }}
       - if: always()
         name: Pull from subtree repository
-        run: git subtree pull -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
+        run: |
+          git pull origin ${TARGET_BRANCH}
+          git subtree pull -P ${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH}
       # - if: always()
       #   name: Push to subtree repository
       #   run: |
