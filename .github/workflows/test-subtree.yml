@@ -11,6 +11,14 @@ on:
       - "develop"
     paths:
       - sdfstudio/**
+  push:
+    branches:
+      - "main"
+      - "master"
+      - "release"
+      - "develop"
+    paths:
+      - sdfstudio/**
 
 jobs:
   push-to-subtree:
