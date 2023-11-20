@@ -39,7 +39,7 @@ jobs:
           ssh-add -l
       - name: Add subtree's remote repository 
         run: |
-            git remote add git@github.com:reconlabs-luke/sdfstudio.git
+            git remote add ${TARGET_REPOSITORY} git@github.com:reconlabs-luke/sdfstudio.git
             git remote update
       - if: github.event.pull_request.merged == true
         name: If Merged, target branch will be set base branch
