@@ -9,6 +9,16 @@ on:
       - "master"
       - "release"
       - "develop"
+    paths:
+      - sdfstudio/**
+  push:
+    branches:
+      - "main"
+      - "master"
+      - "release"
+      - "develop"
+    paths:
+      - sdfstudio/**
 
 jobs:
   push-to-subtree:
@@ -38,15 +48,15 @@ jobs:
         run: |
           git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
           git remote update
-      - if: always()
-        name: Pull from subtree repository
-        run: |
-          git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.base_ref }} --allow-unrelated-histories
-          bash ${TARGET_REPOSITORY}/hello.bash
-          git push origin ${{ github.base_ref }}
-          echo good
       # - if: always()
-      #   name: Push to subtree repository
+      #   name: Pull from subtree repository
       #   run: |
-      #     ls
-      #     git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
+      #     git merge -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.base_ref }} --allow-unrelated-histories
+      #     bash ${TARGET_REPOSITORY}/hello.bash
+      #     git push origin ${{ github.base_ref }}
+      #     echo good !
+      - if: always()
+        name: Push to subtree repository
+        run: |
+          ls
+          git push ${TARGET_REPOSITORY} `git subtree split --prefix ${TARGET_REPOSITORY} ${TARGET_BRANCH}`:${TARGET_BRANCH} --force
