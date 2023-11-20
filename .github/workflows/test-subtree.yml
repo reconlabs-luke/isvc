@@ -66,8 +66,7 @@ jobs:
         run: |
           git config pull.rebase true
           git config pull.ff only
-          git pull --commit "[ci skip]" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories --force
-          # git merge -m "[ci skip]" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
+          git merge -X -m "[ci skip]" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
           # git push -f
       - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
