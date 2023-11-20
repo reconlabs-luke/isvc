@@ -3,11 +3,12 @@ name: test-subtree
 on:
   pull_request:
     types:
-      - closed
-    branches: 
+      - opened
+    branches:
+      - "main"
+      - "master"
       - "release"
       - "develop"
-      - "feature/*"
 
 jobs:
   push-to-subtree:
