@@ -1,6 +1,9 @@
 name: test-subtree
 
 on:
+  repository_dispatch:
+    types: 
+      - sdfstudio
   pull_request:
     types:
       - opened
@@ -22,7 +25,7 @@ jobs:
   push-to-subtree:
     name: Push to subtree repository
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
+    if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
     env:
       TARGET_GROUP: reconlabs-luke
       TARGET_REPOSITORY: sdfstudio
