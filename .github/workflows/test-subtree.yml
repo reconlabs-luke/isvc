@@ -3,7 +3,7 @@ name: test-subtree
 on:
   pull_request:
     types:
-      - closed
+      - opened
     branches: 
       - "release"
       - "develop"
