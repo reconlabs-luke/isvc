@@ -49,6 +49,7 @@ jobs:
         name: Pull from subtree repository
         run: |
           export GIT_MERGE_AUTOEDIT=no
+          export GIT_EDITOR=true
           git config pull.rebase true
           git subtree pull --prefix=${TARGET_REPOSITORY} ${TARGET_REPOSITORY} ${TARGET_BRANCH} --squash
       # - if: always()
