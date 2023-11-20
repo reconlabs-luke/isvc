@@ -48,7 +48,7 @@ jobs:
       - if: always()
         name: Pull from subtree repository
         run: |
-          git config pull.rebase false
+          git config pull.rebase true
           git pull --squash -s subtree ${TARGET_REPOSITORY} ${TARGET_BRANCH}
           ls
       # - if: always()
