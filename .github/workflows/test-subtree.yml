@@ -25,6 +25,7 @@ jobs:
   push-to-subtree:
     name: Control Subtree 
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
     env:
       TARGET_GROUP: reconlabs-luke
       TARGET_REPOSITORY: sdfstudio
@@ -63,9 +64,9 @@ jobs:
       - if: ${{ contains(github.event.client_payload.msg, '[ci skip]') }}
         name: Merge from subtree repository
         run: |
-          git merge -m "ci skip" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
+          git merge -m "[ci skip]" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.ref }} --allow-unrelated-histories
           bash ${TARGET_REPOSITORY}/hello.bash
-          echo ${{ github.event.client_payload.ref }} && git branch
+          git push -f
       - if: ${{ !contains(github.event.client_payload.msg, '[ci skip]') }}
         name: Push to subtree repository
         run: |
