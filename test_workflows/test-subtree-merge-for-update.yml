@@ -1,0 +1,41 @@
+name: dispatch receiver
+
+on: 
+  repository_dispatch:
+    types: [ sdfstudio ]
+
+jobs:
+  sdfstudio-update:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
+    env:
+        TARGET_GROUP: reconlabs-luke
+        TARGET_REPOSITORY: sdfstudio
+        MANAGER_NAME: luke
+        EMAIL_FORM: reconlabs.ai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.ref }}
+      - name: Add ssh private key
+        run: |
+          git config --global user.name reconlabs-${MANAGER_NAME}
+          git config --global user.email "${MANAGER_NAME}"@"${EMAIL_FORM}" 
+          mkdir -p ~/.ssh && echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.DEPLOY_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+          chmod 400 ~/.ssh/id_rsa
+      - name: Add to ssh agent
+        run: |
+          eval $(ssh-agent)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+      - name: Add subtree's remote repository 
+        run: |
+          git remote add ${TARGET_REPOSITORY} git@github.com:${TARGET_GROUP}/${TARGET_REPOSITORY}.git
+          git remote update
+      - name: Update subtree
+        run: |
+          git merge -m "ci skip" -s subtree -Xsubtree="${TARGET_REPOSITORY}" ${TARGET_REPOSITORY}/${{ github.event.client_payload.branch }} --allow-unrelated-histories
+          bash ${TARGET_REPOSITORY}/hello.bash
+          echo ${{ github.event.client_payload.branch }} && git branch
